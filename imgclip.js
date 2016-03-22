@@ -126,7 +126,6 @@ ImgClip.prototype.changeEvent = function() {
     self.lastH = parseFloat(_container.css('height'));
     el.on('mousemove', function(e) {
       e.stopPropagation();
-      e.stopPropagation();
       self.nowX = e.pageX;
       self.nowY = e.pageY;
       self.diffX = self.nowX - self.lastX;
@@ -137,7 +136,30 @@ ImgClip.prototype.changeEvent = function() {
       el.off('mousemove');
       $('body').off('mouseup');
     })
-  }
+  };
+
+  function moveEventConnerM(e, el, f1, f2, f3, f4) {
+    self.lastX = e.pageX;
+    self.lastY = e.pageY;
+    self.posX = parseFloat(_container.css('left'));
+    self.posY = parseFloat(_container.css('top'));
+    self.lastW = parseFloat(_container.css('width'));
+    self.lastH = parseFloat(_container.css('height'));
+    el.on('touchmove', function(e) {
+      e.preventDefault();
+      e.originalEvent.cancelBubble = true;
+      var e = e.originalEvent.touches[0];
+      self.nowX = e.pageX;
+      self.nowY = e.pageY;
+      self.diffX = self.nowX - self.lastX;
+      self.diffY = self.nowY - self.lastY;
+      self.Criticality2(f1, f2, f3, f4);
+    })
+    $('body').on('touchend', function(e) {
+      el.off('touchmove');
+      $('body').off('touchend');
+    })
+  };
 
   function moveEventEdge(e, el, f1, f2, f3, f4) {
     e.stopPropagation();
@@ -154,40 +176,91 @@ ImgClip.prototype.changeEvent = function() {
       el.off('mousemove');
       $('body').off('mouseup');
     })
-  }
+  };
+
+  function moveEventEdgeM(e, el, f1, f2, f3, f4) {
+    self.lastY = e.pageY;
+    self.posY = parseFloat(_container.css('top'));
+    self.lastH = parseFloat(_container.css('height'));
+    el.on('touchmove', function(e) {
+      e.preventDefault();
+      e.originalEvent.cancelBubble = true;
+      var e = e.originalEvent.touches[0];
+      self.nowY = e.pageY;
+      self.diffY = self.nowY - self.lastY;
+      self.Criticality2(f1, f2, f3, f4);
+    })
+    $('body').on('touchend', function(e) {
+      el.off('touchmove');
+      $('body').off('touchend');
+    })
+  };
+
+
   //上左  先左右，后上下。。。左右，上下，向左/向上true,向右向下flase
   _topleft.on('mousedown', function(e) {
     moveEventConner(e, _topleft, true, true, true, true);
+  });
+  _topleft.on('touchstart', function(e) {
+    e.originalEvent.cancelBubble = true;
+    moveEventConnerM(e.originalEvent.touches[0], _topleft, true, true, true, true);
   });
   //上中
   _topcenter.on('mousedown', function(e) {
     moveEventEdge(e, _topcenter, false, true, false, true);
   });
+  _topcenter.on('touchstart', function(e) {
+    e.originalEvent.cancelBubble = true;
+    moveEventEdgeM(e.originalEvent.touches[0], _topcenter, false, true, false, true);
+  });
   //上右
   _topright.on('mousedown', function(e) {
     moveEventConner(e, _topright, true, true, false, true);
+  });
+  _topright.on('touchstart', function(e) {
+    e.originalEvent.cancelBubble = true;
+    moveEventConnerM(e.originalEvent.touches[0], _topright, true, true, false, true);
   });
   //右中
   _rightmiddle.on('mousedown', function(e) {
     moveEventConner(e, _rightmiddle, true, false, false, false);
   });
+  _rightmiddle.on('touchstart', function(e) {
+    e.originalEvent.cancelBubble = true;
+    moveEventConnerM(e.originalEvent.touches[0], _rightmiddle, true, false, false, false);
+  });
   //下右
   _bottomright.on('mousedown', function(e) {
     moveEventConner(e, _bottomright, true, true, false, false);
+  });
+  _bottomright.on('touchstart', function(e) {
+    e.originalEvent.cancelBubble = true;
+    moveEventConnerM(e.originalEvent.touches[0], _bottomright, true, true, false, false);
   });
   //下中
   _bottomcenter.on('mousedown', function(e) {
     moveEventConner(e, _bottomcenter, false, true, false, false);
   });
+  _bottomcenter.on('touchstart', function(e) {
+    e.originalEvent.cancelBubble = true;
+    moveEventConnerM(e.originalEvent.touches[0], _bottomcenter, false, true, false, false);
+  });
   //下左
   _bottomleft.on('mousedown', function(e) {
     moveEventConner(e, _bottomleft, true, true, true, false);
+  });
+  _bottomleft.on('touchstart', function(e) {
+    e.originalEvent.cancelBubble = true;
+    moveEventConnerM(e.originalEvent.touches[0], _bottomleft, true, true, true, false);
   });
   //zuo zhong
   _leftmiddle.on('mousedown', function(e) {
     moveEventConner(e, _leftmiddle, true, false, true, false);
   });
-
+  _leftmiddle.on('touchstart', function(e) {
+    e.originalEvent.cancelBubble = true;
+    moveEventConnerM(e.originalEvent.touches[0], _leftmiddle, true, false, true, false);
+  });
 
 }
 ImgClip.prototype.Criticality2 = function(f1, f2, f3, f4) {

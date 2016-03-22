@@ -10,9 +10,10 @@ body{
 }
 .container{
   width: 80%;
-  height: 300px;
-  margin:20px auto;
+  height: 600px;
+  margin:0 auto;
   position: relative;
+  top:20px;
   box-sizing:border-box;
 }
 .box{
